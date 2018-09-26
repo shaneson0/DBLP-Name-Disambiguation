@@ -2,6 +2,19 @@
 
 import bibtexparser
 
+
+# 数据预处理
+# 去掉Jun Zhang
+
+def FixAuthor(author):
+    author = author.replace("\n", "")
+    author = author.replace(" ", "")
+    authors = author.split("and")
+    # print(authors)
+    authors.remove('JunZhang')
+    return authors
+
+
 def getAuthorsPaper(filename):
     with open(filename) as bibtex_file:
         bibtex_str = bibtex_file.read()
@@ -17,6 +30,8 @@ def getAuthorsPaper(filename):
             continue
         if 'Jun Zhang' in author:
             # print(item)
+            authors = FixAuthor(author)
+            item['authors'] = authors
             authors_paper.append(item)
     return authors_paper
 

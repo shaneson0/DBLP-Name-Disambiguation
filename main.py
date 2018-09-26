@@ -3,7 +3,7 @@
 from getdata import getdata
 
 papers = getdata()
-print(papers[0])
+print(len(papers))
 
 
 
