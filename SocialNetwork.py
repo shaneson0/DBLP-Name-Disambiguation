@@ -63,22 +63,25 @@ for x in papers:
 
             # Graph.append({XIndex: YIndex})
 
+# Handle Edges
+
 matrix_2 = np.matrix(EdgeArray)
 matrix_transpose = np.transpose(matrix_2)
-
 pprint.pprint(matrix_transpose)
 df = pd.DataFrame(data=matrix_transpose, columns=['Source', 'Target'])
+df.to_csv('./graph/edges.csv', index=False)
 
-df.to_csv('edges.csv', index=False)
-
-# Points
+# Handle Points
 
 matrix_3 = np.matrix(PointArray)
 matrix3_transpose = np.transpose(matrix_3)
-
 df2 = pd.DataFrame(data=matrix3_transpose, columns=['Id', 'Label'])
+df2.to_csv('./graph/points.csv', index=False)
 
-df2.to_csv('points.csv', index=False)
+
+# create graph
+df.to_csv('./graph/edges.txt', index=False)
+
 
 print('Done')
 
