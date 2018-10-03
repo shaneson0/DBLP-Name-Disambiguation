@@ -5,7 +5,7 @@ import numpy as np
 
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
-
+import matplotlib.pyplot as plt
 
 
 def CountDBSCAN(eps, minsamples, X):
@@ -13,7 +13,13 @@ def CountDBSCAN(eps, minsamples, X):
     labels = db.labels_
     # Number of clusters in labels, ignoring noise if present.
     n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
-    return n_clusters_
+
+    # what paper is which cluster
+
+    return n_clusters_, labels
+
+
+
 
 if __name__ == "__main__":
     # #############################################################################

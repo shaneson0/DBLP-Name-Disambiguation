@@ -36,6 +36,8 @@ dblp的基本信息有：
 ```python
 
     pip3 install bibtexparser
+    pip3 install nltk
+    
     
     python3 main.py
 
@@ -68,6 +70,19 @@ import community
 
 
 ```
+
+### 2018/10/01 
+
+求出了每个单词在全部文章中的频率之后，剔除了 'using', 'problem', 'approach', 'method'这几个没有意义的单词后，
+对单词频率进行排序后，取前100个单词作为特征向量。
+
+这100个单词的提取方法在getFeature.py
+
+提取后的单词存放在data/vocabularyFeature.txt
+
+数据聚类：
+
+
 
 
 
