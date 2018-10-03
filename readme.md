@@ -82,6 +82,37 @@ import community
 
 数据聚类：
 
+### 2018/10/03
+
+使用基于密度的DBSCAN，采用欧式距离算相似度求聚类。
+参数的选取：
+
+
+采用枚举寻找最小的噪声比，得到(15, 0, 0.9510204081632653, 1.0)这个较为优的结果
+
+代码如下:
+
+```python
+
+EpsArray = np.linspace(0.1, 14).tolist()
+MinNumArray = np.linspace(1 , 15).tolist()
+
+def CountNoisyRate(labels):
+    NoisyLen = len(list(filter(lambda labelType: labelType == -1, labels)))
+    return NoisyLen
+
+ResArray = []
+for Eps in EpsArray:
+    for MinNum in MinNumArray:
+        tempClusternum, templabels = CountDBSCAN(Eps, MinNum, X)
+        NoisyLen = CountNoisyRate(templabels)
+        ResArray.append((tempClusternum, NoisyLen, Eps, MinNum))
+
+ResArray = sorted(ResArray, key=lambda item: item[1])
+print(ResArray)
+
+```
+
 
 
 
