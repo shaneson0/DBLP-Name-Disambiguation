@@ -18,40 +18,34 @@ import numpy as np
 
 path = './data/extractVocabularyFeature.csv'
 X = pd.read_csv(path)
-# print(df1.head())
-# print(df1)
-
-# 0.35 is the best
-
-# clusternum , labels = CountDBSCAN(0.8, 7, X)
-# print(labels)
-# print(clusternum)
-
-# 枚举一下什么参数可以求最小的噪声比
-# 寻找最小的噪声比，得到 (15, 0)这个较为优的结果
-
-EpsArray = np.linspace(0.1, 14).tolist()
-MinNumArray = np.linspace(1 , 15).tolist()
 
 def CountNoisyRate(labels):
     NoisyLen = len(list(filter(lambda labelType: labelType == -1, labels)))
     return NoisyLen
 
-ResArray = []
-for Eps in EpsArray:
-    for MinNum in MinNumArray:
-        tempClusternum, templabels = CountDBSCAN(Eps, MinNum, X)
-        NoisyLen = CountNoisyRate(templabels)
-        ResArray.append((tempClusternum, NoisyLen, Eps, MinNum))
+# 0.965, 1.0 is the best
 
-ResArray = sorted(ResArray, key=lambda item: item[1])
-print(ResArray)
+clusternum , labels = CountDBSCAN(0.81, 1, X)
+print(labels)
+print('clusternum: ', clusternum)
+print('CountNoisyRate: ', CountNoisyRate(labels))
 
-
-
-# Resnum = len(ResArray)
-# for TempItem in range(10):
-#     print(ResArray['clusternum'], TempItem['NoisyLen'])
+# 枚举一下什么参数可以求最小的噪声比
+# 寻找最小的噪声比，得到(15, 0, 0.9510204081632653, 1.0)这个较为优的结果
+# EpsArray = np.linspace(0.1, 14).tolist()
+# MinNumArray = np.linspace(1 , 15).tolist()
+#
+#
+#
+# ResArray = []
+# for Eps in EpsArray:
+#     for MinNum in MinNumArray:
+#         tempClusternum, templabels = CountDBSCAN(Eps, MinNum, X)
+#         NoisyLen = CountNoisyRate(templabels)
+#         ResArray.append((tempClusternum, NoisyLen, Eps, MinNum))
+#
+# ResArray = sorted(ResArray, key=lambda item: item[1])
+# print(ResArray)
 
 
 
