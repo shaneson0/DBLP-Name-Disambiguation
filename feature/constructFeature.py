@@ -17,8 +17,6 @@ def getVocabularyFeature():
             cnt = cnt + 1
     return map
 
-
-
 def findFeatureArrayBytfidf(texts):
     FeaturesDict = getVocabularyFeature()
     tfidf = TfidfVectorizer(min_df=0.0, max_df=1.0, vocabulary=FeaturesDict)

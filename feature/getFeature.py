@@ -16,8 +16,6 @@ SelfFilter = ['11i', '802.11i', '15-point', '16-18', '18', '2004']
 STOPWORDS = stopwords.words('english') + ['algorithm', 'based', 'content-based' , 'ieee', 'ieee trans', 'trans', 'using', 'problem', 'approach', 'method']
 
 
-
-
 #  2018/09/30
 # 先把stop-words去掉吧，这个有点碍位置
 def test():
@@ -27,7 +25,7 @@ def test():
     res = pd.DataFrame(features.todense(),columns=tfidf.get_feature_names())
     return res
 
-def TF_IDF_GetFeatures(texts):
+def TF_IDF_GetFeatures(texts, ranklimit=100):
     tfidf = TfidfVectorizer(min_df=0.0, max_df=1.0, ngram_range=(1, 2))
     features = tfidf.fit_transform(texts)
 
@@ -44,10 +42,8 @@ def TF_IDF_GetFeatures(texts):
     ranking.to_csv("./data/FeaturesRanking.csv", index=False)
 
     # 提取前100个特征，用于关键字特征用
-
-    MainFeatures = ranking[:100]
+    MainFeatures = ranking[:ranklimit]
     MainFeatures.to_csv("./data/vocabularyFeature.txt", index=False)
-
 
     res = pd.DataFrame(features.todense(), columns=tfidf.get_feature_names())
     res.to_csv("./data/features.csv", index=False)
@@ -71,6 +67,10 @@ def GetDomainFeature(text):
     text = text.replace("{", "")
     text = text.replace("}", "")
     text = text.replace("-", " ")
+    text = text.replace("(", " ")
+    text = text.replace(")", " ")
+    text = text.replace("\\", " ")
+    text = text.replace("_", " ")
 
 
     # tokenizer
@@ -111,11 +111,24 @@ def GetDomainFeature(text):
         if flag:
             FinalArray.append(word)
 
-
-    for word in FinalArray:
-        print(word)
-
     return FinalArray
+
+
+# 二次封装，为第二次优化算法准备
+# 输入：同一组的papers
+# 过程：对同一组的papers的特征提取后，合并成一个字符串
+def GetPapaersDomainFeatures(papers):
+    NewFeaturesArray = []
+    for paper in papers:
+        paper['features'] = []
+        if 'journal' in paper:
+            JournalFeatures = GetDomainFeature(paper['journal'])
+            paper['features'] = paper['features'] + JournalFeatures
+        if 'title'in paper:
+            TitleFeatures = GetDomainFeature(paper['title'])
+            paper['features'] = paper['features'] + TitleFeatures
+        NewFeaturesArray.append(' '.join(paper['features']))
+    return ' '.join(NewFeaturesArray)
 
 
 def GetAllDomainFeatures():

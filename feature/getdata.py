@@ -14,14 +14,9 @@ def FixAuthor(author):
     authors.remove('JunZhang')
     return authors
 
-
-def getAuthorsPaper(filename):
-    with open(filename) as bibtex_file:
-        bibtex_str = bibtex_file.read()
-
-    bib_database = bibtexparser.loads(bibtex_str)
+def transPapers(papers):
     authors_paper = []
-    for item in bib_database.entries:
+    for item in papers:
         if 'author' in item:
             author = item['author']
         elif 'editor' in item:
@@ -35,6 +30,13 @@ def getAuthorsPaper(filename):
             authors_paper.append(item)
     return authors_paper
 
+def getAuthorsPaper(filename):
+    with open(filename) as bibtex_file:
+        bibtex_str = bibtex_file.read()
+
+    bib_database = bibtexparser.loads(bibtex_str)
+    return transPapers(bib_database.entries)
+
 def getdata():
     AllPapers = []
 
@@ -44,6 +46,11 @@ def getdata():
         else:
             filename = './data/Zhang_0010_Jun.bib'
         papers = getAuthorsPaper(filename)
+
+        # papers 设置authorId， 为检验正确性做准备
+        for paper in papers:
+            paper['authorId'] = i
+
         AllPapers = AllPapers + papers
 
     return AllPapers
